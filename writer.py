@@ -15,6 +15,7 @@ _pull_path_template = os.path.join('{src_dir}', '{owner}', '{repo}', 'pull-{pull
 _issue_path_template = os.path.join('{src_dir}', '{owner}', '{repo}', 'issue-{issue_number}.json')
 
 _dataset_header = [
+    'repo_id',
     'issue_number',
     'issue_title',
     'issue_body_md',
@@ -50,6 +51,7 @@ def write_dataset(src_dir, dst_file):
     data.
 
     The CSV file will have the following columns:
+    - repo_id: Integer
     - issue_number: Integer
     - issue_title: Text
     - issue_body_md: Text, in Markdown format, can be empty
@@ -136,6 +138,7 @@ def _dataset_row(issue, pull):
         issue_body_plain = _md_to_text(issue_body_md)
     issue_label_ids = ','.join(str(l['id']) for l in issue['labels'])
     return [
+        pull['base']['repo']['id'],
         issue['number'],
         issue['title'],
         issue_body_md,
