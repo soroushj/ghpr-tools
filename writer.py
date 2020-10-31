@@ -50,23 +50,23 @@ def write_dataset(src_dir, dst_file):
     data.
 
     The CSV file will have the following columns:
-    - issue_number: integer
-    - issue_title: text
-    - issue_body_md: text, in Markdown format, can be empty
-    - issue_body_plain: text, in plain text, can be empty
-    - issue_created_at: integer, in Unix time
-    - issue_author_id: integer
-    - issue_author_association: integer enum (see values below)
-    - issue_label_ids: comma-separated integers, can be empty
-    - pull_number: integer
-    - pull_created_at: integer, in Unix time
-    - pull_merged_at: integer, in Unix time
-    - pull_comments: integer
-    - pull_review_comments: integer
-    - pull_commits: integer
-    - pull_additions: integer
-    - pull_deletions: integer
-    - pull_changed_files: integer
+    - issue_number: Integer
+    - issue_title: Text
+    - issue_body_md: Text, in Markdown format, can be empty
+    - issue_body_plain: Text, in plain text, can be empty
+    - issue_created_at: Integer, in Unix time
+    - issue_author_id: Integer
+    - issue_author_association: Integer enum (see values below)
+    - issue_label_ids: Comma-separated integers, can be empty
+    - pull_number: Integer
+    - pull_created_at: Integer, in Unix time
+    - pull_merged_at: Integer, in Unix time
+    - pull_comments: Integer
+    - pull_review_comments: Integer
+    - pull_commits: Integer
+    - pull_additions: Integer
+    - pull_deletions: Integer
+    - pull_changed_files: Integer
     The value of issue_body_plain is converted from issue_body_md. The conversion is
     not always perfect. In some cases, issue_body_plain still contains some Markdown
     tags.
@@ -79,8 +79,8 @@ def write_dataset(src_dir, dst_file):
     - 5: Member
     - 6: None
     - 7: Owner
-    Rows are sorted by owner username, repository name, and then pull request
-    number.
+    Rows are sorted by repository owner username, repository name, and then pull
+    request number.
     The source directory must contain owner/repo/issue-N.json and
     owner/repo/pull-N.json files. The destination directory of Crawler should
     normally be used as the source directory of Writer. The destination file will be
