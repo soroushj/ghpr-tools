@@ -148,24 +148,21 @@ class Crawler(object):
         self._interrupted = False
         while not self._interrupted:
             pulls = self._get(_pulls_url_template.format(per_page=self.per_page, owner=owner, repo=repo, page=page))
-            pulls_issue_numbers = {} # {pull1_number: [issue1_number, issue2_number]}
-            for p in pulls:
-                linked_issue_numbers = _extract_linked_issue_numbers(p.get('body'), linked_issues_regex)
-                if linked_issue_numbers and p['merged_at']:
-                    pulls_issue_numbers[p['number']] = linked_issue_numbers
-                if self.save_pull_pages:
-                    p['linked_issue_numbers'] = linked_issue_numbers
             if self.save_pull_pages:
                 _save_json(pulls, _pulls_path_template.format(dst_dir=self.dst_dir, owner=owner, repo=repo, page=page))
-            for pull_number, issue_numbers in pulls_issue_numbers.items():
-                pull = self._get(_pull_url_template.format(owner=owner, repo=repo, pull_number=pull_number))
-                pull['linked_issue_numbers'] = issue_numbers
-                _save_json(pull, _pull_path_template.format(dst_dir=self.dst_dir, owner=owner, repo=repo, pull_number=pull_number))
-                num_pulls += 1
-                for issue_number in issue_numbers:
-                    issue = self._get(_issue_url_template.format(owner=owner, repo=repo, issue_number=issue_number))
-                    _save_json(issue, _issue_path_template.format(dst_dir=self.dst_dir, owner=owner, repo=repo, issue_number=issue_number))
-                    num_issues += 1
+            for p in pulls:
+                if p['merged_at']:
+                    linked_issue_numbers = _extract_linked_issue_numbers(p.get('body'), linked_issues_regex)
+                    if linked_issue_numbers:
+                        pull_number = p['number']
+                        pull = self._get(_pull_url_template.format(owner=owner, repo=repo, pull_number=pull_number))
+                        pull['linked_issue_numbers'] = linked_issue_numbers
+                        _save_json(pull, _pull_path_template.format(dst_dir=self.dst_dir, owner=owner, repo=repo, pull_number=pull_number))
+                        num_pulls += 1
+                        for issue_number in linked_issue_numbers:
+                            issue = self._get(_issue_url_template.format(owner=owner, repo=repo, issue_number=issue_number))
+                            _save_json(issue, _issue_path_template.format(dst_dir=self.dst_dir, owner=owner, repo=repo, issue_number=issue_number))
+                            num_issues += 1
             logging.info('Crawl: finished {} {}/{}'.format(page, owner, repo))
             print('Page {} finished ({}/{})'.format(page, owner, repo))
             if len(pulls) < self.per_page:
