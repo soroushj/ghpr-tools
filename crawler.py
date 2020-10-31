@@ -44,8 +44,8 @@ class TooManyRequestFailures(Exception):
     pass
 
 class Crawler(object):
-    """Crawl GitHub repositories to find and save issues and pull requests that have
-    fixed them.
+    """Crawl GitHub repositories to find and save merged pull requests and the issues
+    they have fixed.
 
     The crawler goes through the pages of closed pull requests, from oldest to
     newest. If a pull request is merged and links one or more issues in its
@@ -115,8 +115,8 @@ class Crawler(object):
         signal.signal(signal.SIGINT, sigint_handler)
 
     def crawl(self, owner, repo, start_page=1):
-        """Crawls a GitHub repository and saves issues and pull requests that have fixed
-        them.
+        """Crawls a GitHub repository, finds and saves merged pull requests and the issues
+        they have fixed.
 
         The crawler goes through the pages of closed pull requests, from oldest to
         newest. If a pull request is merged and links one or more issues in its
@@ -209,7 +209,7 @@ def main():
     init_params = inspect.signature(Crawler.__init__).parameters
     crawl_params = inspect.signature(Crawler.crawl).parameters
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-        description='Crawl GitHub repositories to find and save issues and pull requests that have fixed them. '
+        description='Crawl GitHub repositories to find and save merged pull requests and the issues they have fixed. '
                     'The crawler goes through the pages of closed pull requests, from oldest to newest. '
                     'If a pull request is merged and links one or more issues in its description, '
                     'the pull request and its linked issue(s) will be fetched and saved as JSON files. '
