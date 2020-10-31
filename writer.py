@@ -57,7 +57,7 @@ def write_dataset(src_dir, dst_file):
     - issue_created_at: integer, in Unix time
     - issue_author_id: integer
     - issue_author_association: integer enum (see values below)
-    - issue_label_ids: comma-seperated integers, can be empty
+    - issue_label_ids: comma-separated integers, can be empty
     - pull_number: integer
     - pull_created_at: integer, in Unix time
     - pull_merged_at: integer, in Unix time
