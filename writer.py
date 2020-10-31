@@ -81,8 +81,8 @@ def write_dataset(src_dir, dst_file, limit_rows=0):
     - 5: Member
     - 6: None
     - 7: Owner
-    Rows are sorted by repository owner username, repository name, and then pull
-    request number.
+    Rows are sorted by repository owner username, repository name, pull request
+    number, and then issue number.
     The source directory must contain owner/repo/issue-N.json and
     owner/repo/pull-N.json files. The destination directory of Crawler should
     normally be used as the source directory of Writer. The destination file will be
@@ -102,6 +102,7 @@ def write_dataset(src_dir, dst_file, limit_rows=0):
             print('{}/{} ({}/{})'.format(owner, repo, i + 1, num_repos))
             for pull_number in tqdm(_sorted_pull_numbers(src_dir, owner, repo)):
                 pull = _read_json(_pull_path_template.format(src_dir=src_dir, owner=owner, repo=repo, pull_number=pull_number))
+                pull['linked_issue_numbers'].sort()
                 for issue_number in pull['linked_issue_numbers']:
                     issue = _read_json(_issue_path_template.format(src_dir=src_dir, owner=owner, repo=repo, issue_number=issue_number))
                     dataset.writerow(_dataset_row(issue, pull))

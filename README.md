@@ -232,8 +232,8 @@ def write_dataset(src_dir, dst_file, limit_rows=0):
     - 5: Member
     - 6: None
     - 7: Owner
-    Rows are sorted by repository owner username, repository name, and then pull
-    request number.
+    Rows are sorted by repository owner username, repository name, pull request
+    number, and then issue number.
     The source directory must contain owner/repo/issue-N.json and
     owner/repo/pull-N.json files. The destination directory of Crawler should
     normally be used as the source directory of Writer. The destination file will be
