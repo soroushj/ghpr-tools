@@ -46,7 +46,7 @@ _author_association_value = {
     'OWNER': 7,
 }
 
-def write_dataset(src_dir, dst_file):
+def write_dataset(src_dir, dst_file, limit_rows=0):
     """Reads JSON files downloaded by the Crawler and writes a CSV file from their
     data.
 
@@ -106,6 +106,9 @@ def write_dataset(src_dir, dst_file):
                     issue = _read_json(_issue_path_template.format(src_dir=src_dir, owner=owner, repo=repo, issue_number=issue_number))
                     dataset.writerow(_dataset_row(issue, pull))
                     num_rows += 1
+                    if num_rows == limit_rows:
+                        print('Wrote {} rows (limited)'.format(num_rows))
+                        return
     print('Wrote {} rows'.format(num_rows))
 
 def _sorted_owner_repo_pairs(src_dir):
@@ -168,17 +171,19 @@ def _iso_to_unix(iso):
     return calendar.timegm(utc_time)
 
 def main():
-    parser = argparse.ArgumentParser(
+    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         description='Read JSON files downloaded by the Crawler and write a CSV file from their data. '
                     'The source directory must contain owner/repo/issue-N.json and owner/repo/pull-N.json files. '
                     'The destination directory of Crawler should normally be used as the source directory of Writer. '
                     'The destination file will be overwritten if it already exists.')
+    parser.add_argument('-l', '--limit-rows', type=int, default=0,
+        help='limit number of rows to write, ignored if non-positive')
     parser.add_argument('src_dir', type=str,
         help='source directory')
     parser.add_argument('dst_file', type=str,
         help='destination CSV file')
     args = parser.parse_args()
-    write_dataset(args.src_dir, args.dst_file)
+    write_dataset(args.src_dir, args.dst_file, limit_rows=args.limit_rows)
 
 if __name__ == '__main__':
     main()
