@@ -22,7 +22,7 @@ The flow is as follows:
     - Optionally save *G*.
     - For each simple pull request *p* in *G*:
       - If *p* is merged:
-        - Let *L* be the list of issue numbers in *R* that *p* links using a [GitHub keyword](https://docs.github.com/en/free-pro-team@latest/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword).
+        - Let *L* be the list of issue numbers that are linked by *p* using a [GitHub keyword](https://docs.github.com/en/free-pro-team@latest/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword) and are in *R*.
         - If *L* is not empty:
           - Fetch pull request *P* with the pull request number of *p*.
           - Set the `linked_issue_numbers` property of *P* to *L*.
