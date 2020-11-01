@@ -72,7 +72,7 @@ class Crawler(object):
 
     def __init__(self,
                  token=None,
-                 dst_dir='data-json',
+                 dst_dir='repos',
                  per_page=100,
                  save_pull_pages=False,
                  max_request_tries=100,

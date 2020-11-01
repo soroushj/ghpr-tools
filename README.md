@@ -66,7 +66,7 @@ optional arguments:
                         GITHUB_OAUTH_TOKEN environment variable (default:
                         None)
   -d DST_DIR, --dst-dir DST_DIR
-                        directory for saving JSON files (default: data-json)
+                        directory for saving JSON files (default: repos)
   -s START_PAGE, --start-page START_PAGE
                         page to start crawling from (default: 1)
   -p PER_PAGE, --per-page PER_PAGE
@@ -116,7 +116,7 @@ class Crawler(object):
 
     def __init__(self,
                  token=None,
-                 dst_dir='data-json',
+                 dst_dir='repos',
                  per_page=100,
                  save_pull_pages=False,
                  max_request_tries=100,
