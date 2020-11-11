@@ -92,25 +92,37 @@ def write_dataset(src_dir, dst_file, limit_rows=0):
         src_dir (str): Source directory.
         dst_file (str): Destination CSV file.
     """
-    num_rows = 0
+    repo_full_names = []
+    repo_num_rows = []
+    total_num_rows = 0
+    def print_results():
+        for r, n in zip(repo_full_names, repo_num_rows):
+            print('{}: {:,}'.format(r, n))
+        print('Total: {:,}'.format(total_num_rows))
     with open(dst_file, 'w', newline='') as dataset_file:
         dataset = csv.writer(dataset_file)
         dataset.writerow(_dataset_header)
         owner_repo_pairs = _sorted_owner_repo_pairs(src_dir)
         num_repos = len(owner_repo_pairs)
         for i, (owner, repo) in enumerate(owner_repo_pairs):
-            print('{}/{} ({}/{})'.format(owner, repo, i + 1, num_repos))
+            repo_full_name = '{}/{}'.format(owner, repo)
+            repo_full_names.append(repo_full_name)
+            repo_num_rows.append(0)
+            print('{} ({:,}/{:,})'.format(repo_full_name, i + 1, num_repos))
             for pull_number in tqdm(_sorted_pull_numbers(src_dir, owner, repo)):
                 pull = _read_json(_pull_path_template.format(src_dir=src_dir, owner=owner, repo=repo, pull_number=pull_number))
                 pull['linked_issue_numbers'].sort()
                 for issue_number in pull['linked_issue_numbers']:
                     issue = _read_json(_issue_path_template.format(src_dir=src_dir, owner=owner, repo=repo, issue_number=issue_number))
                     dataset.writerow(_dataset_row(issue, pull))
-                    num_rows += 1
-                    if num_rows == limit_rows:
-                        print('Wrote {} rows (limited)'.format(num_rows))
+                    repo_num_rows[i] += 1
+                    total_num_rows += 1
+                    if total_num_rows == limit_rows:
+                        print('Limit of {:,} rows reached'.format(limit_rows))
+                        print_results()
                         return
-    print('Wrote {} rows'.format(num_rows))
+    print('Finished')
+    print_results()
 
 def _sorted_owner_repo_pairs(src_dir):
     pairs = [] # [(owner1,repo1), (owner2,repo2)]
