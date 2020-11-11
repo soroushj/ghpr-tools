@@ -242,5 +242,6 @@ def write_dataset(src_dir, dst_file, limit_rows=0):
     Args:
         src_dir (str): Source directory.
         dst_file (str): Destination CSV file.
+        limit_rows (int): Maximum number of rows to write.
     """
 ```
